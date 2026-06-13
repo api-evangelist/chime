@@ -1,0 +1,52 @@
+name: Chime API Rate Limits
+description: Rate limit information for the Chime Partner API. Chime does not publish specific rate limit values publicly in its developer documentation. Rate limits are enforced at the partner level and are defined in individual partnership agreements. The following reflects what is known from public documentation and general API design patterns.
+url: https://developer.chime.com/docs/chime-apis
+created: '2026-06-13'
+modified: '2026-06-13'
+rateLimits:
+  - endpoint: GET /users/:id/transactions
+    description: Retrieve all transactions for a given user across all bank accounts
+    paginationLimit: 2000
+    paginationDefault: 500
+    notes:
+      - The limit query parameter controls results per account per request (max 2000, default 500)
+      - Pagination is offset-based using the start query parameter (default 0)
+      - Date filtering available via start_date and end_date (default range is last 30 days)
+      - Includes pending and settled transactions by default
+  - endpoint: GET /users/:id/accounts/:account_id/transactions
+    description: Retrieve transactions for a specific bank account of a given user
+    notes:
+      - Per-account transaction retrieval
+      - Same pagination parameters as the general transactions endpoint
+  - endpoint: GET /users/:id/accounts/:account_id/statement
+    description: Retrieve account statement for a specific bank account
+    notes:
+      - Statement retrieval rate limits are partner-specific
+  - endpoint: POST /users/auth_token
+    description: Authenticate user and issue session token (Legacy Auth)
+    notes:
+      - Used for legacy authentication flows
+      - New integrations should use OAuth 2.0 instead
+  - endpoint: POST /oauth/authorize
+    description: OAuth 2.0 authorization endpoint
+    notes:
+      - Supports Authorization Code Flow and PKCE
+      - Follows OAuth 2.0 standard rate limiting conventions
+  - endpoint: POST /oauth/tokens
+    description: OAuth 2.0 token exchange and refresh
+    notes:
+      - Token exchange and refresh endpoint
+      - Follows OAuth 2.0 standard conventions
+general:
+  - Chime does not publicly disclose specific numeric rate limits (requests per second/minute/hour) for the Partner API.
+  - Rate limits are defined in partner-level agreements.
+  - The sandbox environment is available for integration testing without production rate limit concerns.
+  - Developers are advised to implement exponential backoff and retry logic for production integrations.
+  - For enterprise-level rate limit requirements, contact Chime directly through the developer portal.
+authentication:
+  - type: OAuth 2.0 (recommended)
+    description: Bearer token passed in Authorization header; supports Authorization Code Flow and PKCE
+    tokenEndpoint: https://developer.chime.com/oauth/tokens
+  - type: Legacy Partner Auth
+    description: Query parameters client_id, secret, and auth_token; available for existing integrations only
+    notes: New applications should use OAuth 2.0

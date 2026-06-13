@@ -1,0 +1,53 @@
+name: Chime Plans and Pricing
+description: Chime offers consumer banking tiers with varying feature sets and API access. The platform operates on a model where banking is free for consumers; revenue is generated through interchange fees. Partner API access is available for fintech integrators and developers building on top of the Chime platform.
+url: https://chime.me/pricing/
+created: '2026-06-13'
+modified: '2026-06-13'
+plans:
+  - name: Chime (Free)
+    description: The core Chime account with no monthly fees, no minimum balance, and access to fee-free checking and savings accounts with SpotMe overdraft protection.
+    url: https://www.chime.com/
+    price: Free
+    currency: USD
+    features:
+      - Fee-free checking account
+      - Fee-free savings account
+      - Access to 47,000+ fee-free ATMs
+      - SpotMe overdraft protection up to $200
+      - Early paycheck access (up to 2 days early with direct deposit)
+      - Pay Anyone peer-to-peer transfers
+      - Chime Credit Builder card (no credit check, no interest, no annual fee)
+      - MyPay early wage access (up to $500 of pay on demand)
+      - Mobile check deposit
+      - No monthly maintenance fees
+      - FDIC insured via The Bancorp Bank and Stride Bank
+  - name: Chime Plus
+    description: An enhanced tier offering 2% cash back on purchases with qualifying direct deposits.
+    url: https://www.chime.com/
+    features:
+      - All Chime Free features
+      - 2% cash back on purchases with qualifying direct deposit
+  - name: Chime Prime
+    description: Premium membership tier offering higher savings APY, cash back rewards, and enhanced overdraft coverage.
+    url: https://www.chime.com/
+    features:
+      - All Chime Plus features
+      - Up to 3.75% APY on savings
+      - 5% cash back on selected category purchases (up to $1,500 monthly)
+      - Enhanced SpotMe overdraft protection
+  - name: Partner API Access
+    description: API access for fintech partners and developers integrating with the Chime platform. Enables read access to user accounts, transaction history, and balances, plus payment initiation. Access is granted on a partner basis; pricing is negotiated directly with Chime.
+    url: https://developer.chime.com/
+    price: Contact for pricing
+    features:
+      - OAuth 2.0 authentication
+      - User account information access
+      - Transaction history retrieval
+      - Account balance and statement access
+      - Payment initiation
+      - Sandbox environment for testing
+      - OpenAPI specification access
+notes:
+  - Chime is not a bank; banking services are provided by The Bancorp Bank, N.A. or Stride Bank, N.A., Members FDIC.
+  - Consumer account features are subject to eligibility requirements (e.g., SpotMe requires qualifying direct deposit).
+  - Partner API pricing and terms are determined through direct partnership agreements with Chime.

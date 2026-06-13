@@ -1,0 +1,56 @@
+name: Chime FinOps
+description: Financial operations and cost considerations for integrating with the Chime Partner API and consumer banking platform. Chime operates on a zero-fee consumer model funded by interchange revenue; Partner API access is priced through enterprise agreements.
+url: https://developer.chime.com/
+created: '2026-06-13'
+modified: '2026-06-13'
+revenueModel:
+  description: Chime generates revenue primarily through interchange fees collected when members use their debit and credit cards. This model enables Chime to offer fee-free banking services to consumers. There are no monthly maintenance fees, minimum balance requirements, or overdraft fees charged to end users.
+  sources:
+    - Interchange fees on debit and credit card transactions
+    - Premium membership tiers (Chime Plus, Chime Prime) with enhanced features
+    - SpotMe cash tips (optional, voluntary tips from members using overdraft protection)
+consumerCosts:
+  monthlyFee: $0
+  minimumBalance: $0
+  overdraftFee: $0
+  atmFees: $0 at 47,000+ in-network ATMs
+  outOfNetworkAtmFee: $2.50 per transaction
+  foreignTransactionFee: $0
+  notes:
+    - No mandatory fees for core banking services
+    - MyPay early wage access carries no mandatory fees and no interest
+    - Optional instant transfer fees may apply for expedited transfers
+partnerAPIFinOps:
+  description: Partner API pricing is not publicly disclosed and is determined through direct agreements with Chime's partnership team. The following considerations apply to businesses integrating with the Chime Partner API.
+  considerations:
+    - name: Partnership Agreement
+      description: API access requires a formal partnership agreement with Chime. Pricing, usage limits, and SLAs are negotiated individually.
+    - name: Sandbox Environment
+      description: A sandbox environment is available for development and testing. Sandbox usage policies and any associated costs should be confirmed with Chime.
+    - name: Data Access Costs
+      description: Costs for accessing user account data (transactions, balances, statements) are partner-agreement-specific. Volume-based pricing may apply.
+    - name: Payment Initiation
+      description: Fees for payment initiation via the API (ACH transfers, instant transfers) may vary by payment type and volume.
+    - name: OAuth Infrastructure
+      description: OAuth 2.0 token management and refresh operations are part of the API infrastructure. High-volume token operations may have associated costs defined in partner agreements.
+    - name: Integration Testing
+      description: Budget for development time against the sandbox environment. Chime provides documentation at developer.chime.com for self-service testing.
+costOptimization:
+  - Use the sandbox environment extensively before moving to production to minimize wasted API calls.
+  - Implement efficient pagination when fetching transaction history (use maximum limit of 2000 per account per request).
+  - Cache account and balance data appropriately to reduce redundant API calls.
+  - Use date range filtering (start_date/end_date) on transaction endpoints to fetch only the data needed.
+  - Implement webhook or event-driven patterns where available to avoid polling-based architectures.
+  - Monitor API usage against partner agreement thresholds to avoid overage charges.
+complianceAndRisk:
+  - Chime is a fintech company, not a bank. Banking services are provided by The Bancorp Bank, N.A. and Stride Bank, N.A. (both FDIC members). Partner integrations must comply with applicable banking regulations.
+  - End-user data accessed via the Partner API is subject to Chime's privacy policy and applicable financial data protection regulations.
+  - Partners must comply with OAuth token security requirements and protect user credentials and access tokens.
+  - FDIC insurance covers deposits up to $250,000 per depositor.
+contacts:
+  - type: Developer Relations
+    url: https://developer.chime.com/
+    description: Primary contact point for Partner API access and developer support
+  - type: Business Partnerships
+    url: https://www.chime.com/
+    description: Enterprise and business partnership inquiries
