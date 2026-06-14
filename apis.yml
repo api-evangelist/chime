@@ -1,63 +1,72 @@
 aid: chime
 name: Chime
-description: Chime is a neobank and fintech platform offering fee-free checking and savings accounts, early paycheck access, credit building, and peer-to-peer payment features for consumer banking. The Chime Partner API enables developers to access user account information, transaction details, account balances, statements, and payment initiation through OAuth 2.0 authentication.
+description: Chime is a neobank and fintech platform offering fee-free checking and
+  savings accounts, early paycheck access, credit building, and peer-to-peer payment
+  features for consumer banking. The Chime Partner API enables developers to access
+  user account information, transaction details, account balances, statements, and
+  payment initiation through OAuth 2.0 authentication.
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 url: https://raw.githubusercontent.com/api-evangelist/chime/refs/heads/main/apis.yml
 created: '2026-06-13'
 modified: '2026-06-13'
 specificationVersion: '0.19'
 tags:
-  - Fintech
-  - Neobank
-  - Banking
-  - Checking Accounts
-  - Savings Accounts
-  - Early Paycheck Access
-  - Credit Building
-  - Peer-to-Peer Payments
-  - Consumer Banking
+- Fintech
+- Neobank
+- Banking
+- Checking Accounts
+- Savings Accounts
+- Early Paycheck Access
+- Credit Building
+- Peer-to-Peer Payments
+- Consumer Banking
 apis:
-  - aid: chime:chime-partner-api
-    name: Chime Partner API
-    description: The Chime Partner API provides programmatic access to Chime user account information, transactions, account balances, statements, and payment initiation. Authentication is handled via OAuth 2.0 with support for Authorization Code Flow and PKCE.
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
-    humanURL: https://developer.chime.com/
-    baseURL: https://api.chimebank.com/chime/v1
-    tags:
-      - Banking
-      - Accounts
-      - Transactions
-      - Payments
-    properties:
-      - type: Documentation
-        url: https://developer.chime.com/docs/chime-apis
-      - type: OpenAPI
-        url: https://developer.chime.com/llms.txt
-      - type: Sandbox
-        url: https://developer.chime.com/
-common:
-  - type: Website
-    url: https://www.chime.com/
+- aid: chime:chime-partner-api
+  name: Chime Partner API
+  description: The Chime Partner API provides programmatic access to Chime user account
+    information, transactions, account balances, statements, and payment initiation.
+    Authentication is handled via OAuth 2.0 with support for Authorization Code Flow
+    and PKCE.
+  image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+  humanURL: https://developer.chime.com/
+  baseURL: https://api.chimebank.com/chime/v1
+  tags:
+  - Banking
+  - Accounts
+  - Transactions
+  - Payments
+  properties:
   - type: Documentation
+    url: https://developer.chime.com/docs/chime-apis
+  - type: OpenAPI
+    url: https://raw.githubusercontent.com/api-evangelist/chime/refs/heads/main/openapi/chime-partner-api-openapi.yml
+  - type: Sandbox
     url: https://developer.chime.com/
-  - type: GitHubOrg
-    url: https://github.com/chimehq
-  - type: LinkedIn
-    url: https://www.linkedin.com/company/chime-card
-  - type: Blog
-    url: https://medium.com/life-at-chime
-  - type: Pricing
-    url: https://chime.me/pricing/
-  - type: StatusPage
-    url: https://status.chime.com/
-  - type: X
-    url: https://x.com/chime
-  - type: Plans
-    url: plans/chime-plans-pricing.yml
-  - type: RateLimits
-    url: rate-limits/chime-rate-limits.yml
-  - type: FinOps
-    url: finops/chime-finops.yml
+  - url: graphql/chime-graphql.md
+    type: GraphQL
+common:
+- type: Website
+  url: https://www.chime.com/
+- type: Documentation
+  url: https://developer.chime.com/
+- type: GitHubOrg
+  url: https://github.com/chimehq
+- type: LinkedIn
+  url: https://www.linkedin.com/company/chime-card
+- type: Blog
+  url: https://medium.com/life-at-chime
+- type: Pricing
+  url: https://chime.me/pricing/
+- type: StatusPage
+  url: https://status.chime.com/
+- type: X
+  url: https://x.com/chime
+- type: Plans
+  url: plans/chime-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/chime-rate-limits.yml
+- type: FinOps
+  url: finops/chime-finops.yml
 maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+- FN: Kin Lane
+  email: kin@apievangelist.com

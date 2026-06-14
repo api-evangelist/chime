@@ -1,0 +1,996 @@
+"""
+Chime Financial GraphQL Schema
+Conceptual schema derived from Chime Partner API documentation and product disclosures.
+Chime does not publish a public GraphQL API; this schema models known product surface area.
+Source: https://developer.chime.com/docs/chime-apis
+"""
+
+# -------------------------------------------------------------------
+# Scalars
+# -------------------------------------------------------------------
+
+scalar DateTime
+scalar Date
+scalar Decimal
+
+# -------------------------------------------------------------------
+# Enums
+# -------------------------------------------------------------------
+
+enum AccountType {
+  SPENDING
+  SAVINGS
+  CREDIT_BUILDER
+}
+
+enum AccountStatus {
+  ACTIVE
+  SUSPENDED
+  CLOSED
+  PENDING
+}
+
+enum CardStatusType {
+  ACTIVE
+  FROZEN
+  BLOCKED
+  EXPIRED
+  NOT_ACTIVATED
+}
+
+enum TransactionType {
+  PURCHASE
+  ATM_WITHDRAWAL
+  ACH_CREDIT
+  ACH_DEBIT
+  TRANSFER_IN
+  TRANSFER_OUT
+  REFUND
+  FEE
+  CASH_BACK
+  BILL_PAYMENT
+  PEER_PAYMENT
+}
+
+enum TransactionStatus {
+  PENDING
+  POSTED
+  DECLINED
+  REVERSED
+}
+
+enum TransferType {
+  INTERNAL
+  FRIEND
+  BANK
+  ACH
+  INSTANT
+}
+
+enum TransferStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum AlertType {
+  BALANCE
+  TRANSACTION
+  DEPOSIT
+  PAYMENT_DUE
+}
+
+enum SavingsRuleType {
+  ROUND_UP
+  PERCENTAGE
+  FIXED_AMOUNT
+}
+
+enum BillPaymentStatus {
+  SCHEDULED
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum NotificationChannel {
+  PUSH
+  EMAIL
+  SMS
+  IN_APP
+}
+
+enum CurrencyCode {
+  USD
+  EUR
+  GBP
+  CAD
+  MXN
+}
+
+# -------------------------------------------------------------------
+# Account Domain
+# -------------------------------------------------------------------
+
+"""Root financial account for a Chime member."""
+type Account {
+  id: ID!
+  userId: ID!
+  type: AccountType!
+  status: AccountStatus!
+  spendingAccount: SpendingAccount
+  savingsAccount: SavingsAccount
+  creditBuilderAccount: CreditBuilderAccount
+  directDeposit: DirectDeposit
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""Chime fee-free checking / spending account."""
+type SpendingAccount {
+  id: ID!
+  accountId: ID!
+  routingNumber: String!
+  accountNumber: String!
+  balance: AccountBalance!
+  status: AccountStatus!
+  debitCard: DebitCard
+  virtualCard: VirtualCard
+  transactions(limit: Int, offset: Int): [CardTransaction!]!
+  spotMe: SpotMe
+  overdraftProtection: OverdraftProtection
+  feePolicy: FeePolicy
+  createdAt: DateTime!
+}
+
+"""Chime high-yield savings account."""
+type SavingsAccount {
+  id: ID!
+  accountId: ID!
+  routingNumber: String!
+  accountNumber: String!
+  balance: AccountBalance!
+  status: AccountStatus!
+  apy: Decimal
+  autoSave: AutoSave
+  savingsGoals: [SavingsGoal!]!
+  savings: Savings
+  createdAt: DateTime!
+}
+
+"""Chime Credit Builder secured credit account."""
+type CreditBuilderAccount {
+  id: ID!
+  accountId: ID!
+  status: AccountStatus!
+  creditBuilder: CreditBuilder
+  creditBuilderDetails: CreditBuilderDetails
+  creditLimit: CreditLimit
+  securityDeposit: SecurityDeposit
+  createdAt: DateTime!
+}
+
+"""Extended metadata for a financial account."""
+type AccountDetails {
+  accountId: ID!
+  legalName: String!
+  email: String!
+  phone: String
+  address: String
+  dateOfBirth: Date
+  taxId: String
+  kycStatus: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""Composite balance summary for an account."""
+type AccountBalance {
+  accountId: ID!
+  availableBalance: AvailableBalance!
+  pendingBalance: PendingBalance!
+  totalBalance: Decimal!
+  currency: CurrencyCode!
+  asOf: DateTime!
+}
+
+"""Real-time spendable balance after pending holds."""
+type AvailableBalance {
+  amount: Decimal!
+  currency: CurrencyCode!
+  includesSpotMe: Boolean!
+  asOf: DateTime!
+}
+
+"""Balance held for pending transactions not yet posted."""
+type PendingBalance {
+  amount: Decimal!
+  currency: CurrencyCode!
+  transactionCount: Int!
+  asOf: DateTime!
+}
+
+"""Record of an inbound international deposit."""
+type InternationalDeposit {
+  id: ID!
+  accountId: ID!
+  amount: Decimal!
+  sourceCurrency: CurrencyCode!
+  targetCurrency: CurrencyCode!
+  exchangeRate: Decimal!
+  feeAmount: Decimal!
+  status: TransferStatus!
+  senderName: String
+  reference: String
+  createdAt: DateTime!
+  settledAt: DateTime
+}
+
+"""Direct deposit enrollment and history for a Chime member."""
+type DirectDeposit {
+  id: ID!
+  accountId: ID!
+  routingNumber: String!
+  accountNumber: String!
+  enrolled: Boolean!
+  earlyAccess: Boolean!
+  lastDepositAmount: Decimal
+  lastDepositDate: Date
+  employer: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+# -------------------------------------------------------------------
+# Card Domain
+# -------------------------------------------------------------------
+
+"""Physical Chime Visa debit card."""
+type DebitCard {
+  id: ID!
+  accountId: ID!
+  cardDetails: CardDetails!
+  status: CardStatus!
+  freeze: CardFreeze
+  block: CardBlock
+  createdAt: DateTime!
+  activatedAt: DateTime
+  expiresAt: Date!
+}
+
+"""Metadata for a debit or virtual card."""
+type CardDetails {
+  cardId: ID!
+  lastFour: String!
+  expiryMonth: Int!
+  expiryYear: Int!
+  network: String!
+  cardholderName: String!
+  billingAddress: String
+}
+
+"""Current lifecycle status of a card."""
+type CardStatus {
+  cardId: ID!
+  status: CardStatusType!
+  reason: String
+  updatedAt: DateTime!
+}
+
+"""Record of a temporary card freeze action."""
+type CardFreeze {
+  id: ID!
+  cardId: ID!
+  frozenAt: DateTime!
+  frozenBy: String
+  reason: String
+  unfrozenAt: DateTime
+}
+
+"""Record of a permanent card block action."""
+type CardBlock {
+  id: ID!
+  cardId: ID!
+  blockedAt: DateTime!
+  reason: String!
+  replacementCardId: ID
+}
+
+"""Virtual card provisioned for digital wallet or online use."""
+type VirtualCard {
+  id: ID!
+  accountId: ID!
+  cardDetails: CardDetails!
+  status: CardStatus!
+  tokenizedPAN: String
+  walletType: String
+  createdAt: DateTime!
+}
+
+"""Card disable action record (soft disable, not permanent block)."""
+type DisableCard {
+  cardId: ID!
+  disabledAt: DateTime!
+  reason: String
+  reenabledAt: DateTime
+}
+
+# -------------------------------------------------------------------
+# Transaction Domain
+# -------------------------------------------------------------------
+
+"""Individual debit card transaction."""
+type CardTransaction {
+  id: ID!
+  accountId: ID!
+  cardId: ID!
+  type: TransactionType!
+  status: TransactionStatus!
+  amount: Decimal!
+  currency: CurrencyCode!
+  merchantName: String
+  merchantCategory: String
+  merchantCategoryCode: String
+  description: String
+  authorizationCode: String
+  cashBack: CashBack
+  postedAt: DateTime
+  createdAt: DateTime!
+}
+
+"""Enriched spending transaction with category and merchant detail."""
+type SpenderTransaction {
+  id: ID!
+  transactionId: ID!
+  accountId: ID!
+  type: TransactionType!
+  status: TransactionStatus!
+  amount: Decimal!
+  currency: CurrencyCode!
+  category: String
+  subcategory: String
+  merchantName: String
+  merchantLogoUrl: String
+  location: String
+  note: String
+  tags: [String!]
+  createdAt: DateTime!
+  postedAt: DateTime
+}
+
+"""Cash-back reward earned on an eligible purchase."""
+type CashBack {
+  transactionId: ID!
+  rewardAmount: Decimal!
+  currency: CurrencyCode!
+  merchantName: String!
+  appliedAt: DateTime!
+}
+
+# -------------------------------------------------------------------
+# Transfer Domain
+# -------------------------------------------------------------------
+
+"""Base transfer record."""
+type Transfer {
+  id: ID!
+  type: TransferType!
+  status: TransferStatus!
+  amount: Decimal!
+  currency: CurrencyCode!
+  memo: String
+  createdAt: DateTime!
+  completedAt: DateTime
+}
+
+"""Transfer between Chime spending and savings accounts."""
+type InternalTransfer {
+  id: ID!
+  fromAccountId: ID!
+  toAccountId: ID!
+  amount: Decimal!
+  currency: CurrencyCode!
+  status: TransferStatus!
+  memo: String
+  createdAt: DateTime!
+  completedAt: DateTime
+}
+
+"""Pay Anyone transfer to another Chime member."""
+type FriendTransfer {
+  id: ID!
+  senderAccountId: ID!
+  recipientUserId: ID!
+  recipientName: String!
+  amount: Decimal!
+  currency: CurrencyCode!
+  status: TransferStatus!
+  memo: String
+  createdAt: DateTime!
+  completedAt: DateTime
+}
+
+"""Transfer to or from an external bank account."""
+type BankTransfer {
+  id: ID!
+  accountId: ID!
+  externalRoutingNumber: String!
+  externalAccountNumber: String!
+  externalBankName: String
+  direction: String!
+  amount: Decimal!
+  currency: CurrencyCode!
+  status: TransferStatus!
+  memo: String
+  createdAt: DateTime!
+  settledAt: DateTime
+}
+
+"""ACH debit or credit transfer."""
+type ACHTransfer {
+  id: ID!
+  accountId: ID!
+  direction: String!
+  amount: Decimal!
+  currency: CurrencyCode!
+  traceNumber: String
+  status: TransferStatus!
+  returnCode: String
+  description: String
+  effectiveDate: Date!
+  createdAt: DateTime!
+}
+
+"""Faster or instant payment transfer."""
+type InstantTransfer {
+  id: ID!
+  accountId: ID!
+  recipientAccountId: ID
+  amount: Decimal!
+  currency: CurrencyCode!
+  status: TransferStatus!
+  fee: Decimal
+  estimatedArrival: DateTime
+  createdAt: DateTime!
+  completedAt: DateTime
+}
+
+"""Peer-to-peer payment to another Chime member (Pay Friends)."""
+type PayFriend {
+  id: ID!
+  senderAccountId: ID!
+  recipientPhone: String
+  recipientEmail: String
+  recipientChimeId: ID
+  amount: Decimal!
+  currency: CurrencyCode!
+  status: TransferStatus!
+  memo: String
+  createdAt: DateTime!
+  completedAt: DateTime
+}
+
+"""International cross-border payment record."""
+type InternationalPayment {
+  id: ID!
+  accountId: ID!
+  recipientName: String!
+  recipientCountry: String!
+  recipientAccountNumber: String
+  amount: Decimal!
+  sourceCurrency: CurrencyCode!
+  targetCurrency: CurrencyCode!
+  exchangeRate: Decimal!
+  fee: Decimal!
+  status: TransferStatus!
+  reference: String
+  createdAt: DateTime!
+  settledAt: DateTime
+}
+
+# -------------------------------------------------------------------
+# Savings Domain
+# -------------------------------------------------------------------
+
+"""Savings summary for a Chime savings account."""
+type Savings {
+  accountId: ID!
+  totalSaved: Decimal!
+  currency: CurrencyCode!
+  savingsGoals: [SavingsGoal!]!
+  autoSave: AutoSave
+  roundingTotal: Decimal!
+  updatedAt: DateTime!
+}
+
+"""Named savings target within a Chime savings account."""
+type SavingsGoal {
+  id: ID!
+  accountId: ID!
+  name: String!
+  targetAmount: Decimal!
+  currentAmount: Decimal!
+  currency: CurrencyCode!
+  targetDate: Date
+  achieved: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""Rule governing automatic savings behavior."""
+type SavingsRule {
+  id: ID!
+  accountId: ID!
+  type: SavingsRuleType!
+  enabled: Boolean!
+  roundingRule: Rounding
+  percentageRate: Decimal
+  fixedAmount: Decimal
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""Round-up rule for saving spare change from purchases."""
+type Rounding {
+  ruleId: ID!
+  enabled: Boolean!
+  roundUpTo: Decimal!
+  totalRoundedUp: Decimal!
+  currency: CurrencyCode!
+  updatedAt: DateTime!
+}
+
+"""Automatic savings configuration for a Chime member."""
+type AutoSave {
+  id: ID!
+  accountId: ID!
+  enabled: Boolean!
+  settings: AutoSaveSetting!
+  rules: [SavingsRule!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""Specific parameters for auto-save behavior."""
+type AutoSaveSetting {
+  autoSaveId: ID!
+  savingPercentage: Decimal
+  fixedAmount: Decimal
+  roundUpEnabled: Boolean!
+  frequency: String
+  nextTransferDate: Date
+  updatedAt: DateTime!
+}
+
+# -------------------------------------------------------------------
+# Credit Builder Domain
+# -------------------------------------------------------------------
+
+"""Credit Builder account wrapper for a Chime member."""
+type CreditBuilder {
+  id: ID!
+  accountId: ID!
+  details: CreditBuilderDetails!
+  creditLimit: CreditLimit!
+  securityDeposit: SecurityDeposit!
+  status: AccountStatus!
+  createdAt: DateTime!
+}
+
+"""Detailed state of a Chime Credit Builder account."""
+type CreditBuilderDetails {
+  creditBuilderId: ID!
+  currentBalance: Decimal!
+  availableCredit: Decimal!
+  paymentDue: Decimal
+  paymentDueDate: Date
+  statementDate: Date
+  autopayEnabled: Boolean!
+  creditScoreEstimate: Int
+  updatedAt: DateTime!
+}
+
+"""Current credit limit for a Credit Builder account."""
+type CreditLimit {
+  creditBuilderId: ID!
+  limit: Decimal!
+  currency: CurrencyCode!
+  effectiveDate: Date!
+  updatedAt: DateTime!
+}
+
+"""Secured deposit backing a Credit Builder account."""
+type SecurityDeposit {
+  id: ID!
+  creditBuilderId: ID!
+  depositAmount: Decimal!
+  currency: CurrencyCode!
+  sourceAccountId: ID!
+  depositDate: Date!
+  status: String!
+  updatedAt: DateTime!
+}
+
+# -------------------------------------------------------------------
+# Bill Pay Domain
+# -------------------------------------------------------------------
+
+"""Bill payment record for a Chime member."""
+type BillPayment {
+  id: ID!
+  accountId: ID!
+  payee: BillPayee!
+  amount: Decimal!
+  currency: CurrencyCode!
+  status: BillPaymentStatus!
+  scheduledDate: Date!
+  processedDate: Date
+  confirmationNumber: String
+  memo: String
+  createdAt: DateTime!
+}
+
+"""Registered bill payee for a Chime member."""
+type BillPayee {
+  id: ID!
+  accountId: ID!
+  name: String!
+  accountNumber: String
+  routingNumber: String
+  address: String
+  phone: String
+  category: String
+  isActive: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""Future-dated scheduled bill payment."""
+type ScheduledPayment {
+  id: ID!
+  accountId: ID!
+  payee: BillPayee!
+  amount: Decimal!
+  currency: CurrencyCode!
+  scheduledDate: Date!
+  recurrence: String
+  status: BillPaymentStatus!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+# -------------------------------------------------------------------
+# Alerts and Notifications Domain
+# -------------------------------------------------------------------
+
+"""Push or in-app notification delivered to a Chime member."""
+type Notification {
+  id: ID!
+  userId: ID!
+  channel: NotificationChannel!
+  title: String!
+  body: String!
+  read: Boolean!
+  relatedEntityId: ID
+  relatedEntityType: String
+  createdAt: DateTime!
+  readAt: DateTime
+}
+
+"""User-configured alert for account activity."""
+type Alert {
+  id: ID!
+  userId: ID!
+  type: AlertType!
+  enabled: Boolean!
+  channels: [NotificationChannel!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""Balance threshold alert for a Chime account."""
+type BalanceAlert {
+  id: ID!
+  accountId: ID!
+  thresholdAmount: Decimal!
+  currency: CurrencyCode!
+  triggerWhen: String!
+  enabled: Boolean!
+  channels: [NotificationChannel!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""Alert triggered by a transaction event."""
+type TransactionAlert {
+  id: ID!
+  accountId: ID!
+  triggerType: String!
+  amountThreshold: Decimal
+  currency: CurrencyCode
+  merchantCategory: String
+  enabled: Boolean!
+  channels: [NotificationChannel!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+# -------------------------------------------------------------------
+# ATM and Network Domain
+# -------------------------------------------------------------------
+
+"""Container for ATM search results."""
+type ATMLocator {
+  searchLat: Float!
+  searchLng: Float!
+  radiusMiles: Int!
+  results: [ATMDetails!]!
+  totalCount: Int!
+}
+
+"""Individual ATM location and feature details."""
+type ATMDetails {
+  id: ID!
+  name: String!
+  network: String!
+  address: String!
+  city: String!
+  state: String!
+  zip: String!
+  lat: Float!
+  lng: Float!
+  surchargeFreeFee: Boolean!
+  cashBack: Boolean!
+  accessibility: Boolean!
+  hours: String
+  distanceMiles: Float
+}
+
+"""Check deposit network availability record."""
+type CheckNetwork {
+  id: ID!
+  accountId: ID!
+  checkImageFront: String
+  checkImageBack: String
+  amount: Decimal!
+  currency: CurrencyCode!
+  status: String!
+  availabilityDate: Date
+  declineReason: String
+  submittedAt: DateTime!
+  processedAt: DateTime
+}
+
+# -------------------------------------------------------------------
+# Overdraft and Fee Policy Domain
+# -------------------------------------------------------------------
+
+"""SpotMe overdraft protection details for a Chime member."""
+type SpotMe {
+  id: ID!
+  accountId: ID!
+  eligible: Boolean!
+  limit: Decimal!
+  used: Decimal!
+  available: Decimal!
+  currency: CurrencyCode!
+  boostAmount: Decimal
+  updatedAt: DateTime!
+}
+
+"""Overdraft protection settings for a Chime spending account."""
+type OverdraftProtection {
+  accountId: ID!
+  spotMeEnabled: Boolean!
+  spotMeLimit: Decimal
+  savingsTransferEnabled: Boolean!
+  updatedAt: DateTime!
+}
+
+"""Fee schedule for a Chime account (predominantly $0)."""
+type FeePolicy {
+  accountId: ID!
+  monthlyFee: Decimal!
+  overdraftFee: Decimal!
+  atmFee: Decimal!
+  foreignTransactionFee: Decimal!
+  currency: CurrencyCode!
+  effectiveDate: Date!
+}
+
+# -------------------------------------------------------------------
+# Auth Domain
+# -------------------------------------------------------------------
+
+"""Partner API key record for Chime API access."""
+type APIKey {
+  id: ID!
+  clientId: String!
+  environment: String!
+  scopes: [String!]!
+  createdAt: DateTime!
+  expiresAt: DateTime
+  lastUsedAt: DateTime
+}
+
+"""OAuth 2.0 token metadata for authenticated API sessions."""
+type Token {
+  accessToken: String!
+  tokenType: String!
+  expiresIn: Int!
+  scope: String!
+  refreshToken: String
+  issuedAt: DateTime!
+}
+
+# -------------------------------------------------------------------
+# Input Types
+# -------------------------------------------------------------------
+
+input TransferInput {
+  fromAccountId: ID!
+  toAccountId: ID!
+  amount: Decimal!
+  currency: CurrencyCode!
+  memo: String
+}
+
+input PayFriendInput {
+  senderAccountId: ID!
+  recipientChimeId: ID
+  recipientPhone: String
+  recipientEmail: String
+  amount: Decimal!
+  currency: CurrencyCode!
+  memo: String
+}
+
+input SavingsGoalInput {
+  accountId: ID!
+  name: String!
+  targetAmount: Decimal!
+  currency: CurrencyCode!
+  targetDate: Date
+}
+
+input AutoSaveInput {
+  accountId: ID!
+  enabled: Boolean!
+  savingPercentage: Decimal
+  fixedAmount: Decimal
+  roundUpEnabled: Boolean
+}
+
+input BillPaymentInput {
+  accountId: ID!
+  payeeId: ID!
+  amount: Decimal!
+  currency: CurrencyCode!
+  scheduledDate: Date!
+  memo: String
+}
+
+input BalanceAlertInput {
+  accountId: ID!
+  thresholdAmount: Decimal!
+  currency: CurrencyCode!
+  triggerWhen: String!
+  channels: [NotificationChannel!]!
+}
+
+# -------------------------------------------------------------------
+# Query
+# -------------------------------------------------------------------
+
+type Query {
+  """Fetch the root account for a Chime user."""
+  account(userId: ID!): Account
+
+  """Fetch spending account details for a user."""
+  spendingAccount(userId: ID!): SpendingAccount
+
+  """Fetch savings account details for a user."""
+  savingsAccount(userId: ID!): SavingsAccount
+
+  """Fetch Credit Builder account for a user."""
+  creditBuilderAccount(userId: ID!): CreditBuilderAccount
+
+  """Fetch composite account balance."""
+  accountBalance(accountId: ID!): AccountBalance
+
+  """List transactions for an account."""
+  transactions(accountId: ID!, limit: Int, offset: Int): [CardTransaction!]!
+
+  """Fetch enriched spending transactions."""
+  spenderTransactions(accountId: ID!, limit: Int, offset: Int): [SpenderTransaction!]!
+
+  """Fetch a specific transfer by ID."""
+  transfer(transferId: ID!): Transfer
+
+  """List transfers for an account."""
+  transfers(accountId: ID!, limit: Int, offset: Int): [Transfer!]!
+
+  """List savings goals for a user."""
+  savingsGoals(userId: ID!): [SavingsGoal!]!
+
+  """Fetch auto-save configuration for a user."""
+  autoSaveSettings(userId: ID!): AutoSave
+
+  """Fetch Credit Builder details for a user."""
+  creditBuilder(userId: ID!): CreditBuilder
+
+  """List registered bill payees for a user."""
+  billPayees(userId: ID!): [BillPayee!]!
+
+  """List scheduled bill payments for a user."""
+  scheduledPayments(userId: ID!): [ScheduledPayment!]!
+
+  """List notifications for a user."""
+  notifications(userId: ID!, unreadOnly: Boolean): [Notification!]!
+
+  """List user-configured alerts."""
+  alerts(userId: ID!): [Alert!]!
+
+  """Find ATMs near a geographic location."""
+  atmLocator(lat: Float!, lng: Float!, radius: Int): ATMLocator
+
+  """Fetch SpotMe eligibility and current limit for a user."""
+  spotMe(userId: ID!): SpotMe
+
+  """Fetch debit card details for a user."""
+  debitCard(userId: ID!): DebitCard
+
+  """Fetch virtual card for a user."""
+  virtualCard(userId: ID!): VirtualCard
+
+  """Fetch direct deposit enrollment for a user."""
+  directDeposit(userId: ID!): DirectDeposit
+
+  """Fetch fee policy for a Chime account."""
+  feePolicy(accountId: ID!): FeePolicy
+}
+
+# -------------------------------------------------------------------
+# Mutation
+# -------------------------------------------------------------------
+
+type Mutation {
+  """Temporarily freeze a Chime debit card."""
+  freezeCard(cardId: ID!): CardFreeze
+
+  """Unfreeze a previously frozen card."""
+  unfreezeCard(cardId: ID!): CardStatus
+
+  """Permanently block a card (triggers replacement)."""
+  blockCard(cardId: ID!, reason: String!): CardBlock
+
+  """Initiate a transfer between accounts."""
+  initiateTransfer(input: TransferInput!): Transfer
+
+  """Send money to a Chime friend (Pay Anyone)."""
+  payFriend(input: PayFriendInput!): PayFriend
+
+  """Create a new savings goal."""
+  createSavingsGoal(input: SavingsGoalInput!): SavingsGoal
+
+  """Update automatic savings rules."""
+  updateAutoSave(input: AutoSaveInput!): AutoSave
+
+  """Schedule a bill payment."""
+  scheduleBillPayment(input: BillPaymentInput!): ScheduledPayment
+
+  """Configure a balance-threshold alert."""
+  setBalanceAlert(input: BalanceAlertInput!): BalanceAlert
+
+  """Initiate direct deposit enrollment for a user."""
+  enrollDirectDeposit(userId: ID!): DirectDeposit
+
+  """Mark a notification as read."""
+  markNotificationRead(notificationId: ID!): Notification
+
+  """Disable a card (soft disable, reversible)."""
+  disableCard(cardId: ID!, reason: String): DisableCard
+}
