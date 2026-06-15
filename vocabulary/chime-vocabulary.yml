@@ -1,0 +1,109 @@
+vocabulary:
+  title: Chime Partner API Vocabulary
+  description: Key terms and domain concepts used in the Chime Partner API
+  source: https://developer.chime.com/
+  terms:
+
+    - term: Chime Partner API
+      definition: >
+        The programmatic interface that enables authorized third-party developers
+        to access Chime user account data, transactions, and initiate payments
+        on behalf of users who have granted consent via OAuth 2.0.
+
+    - term: OAuth 2.0
+      definition: >
+        The primary authentication and authorization framework used by the Chime
+        Partner API. Supports Authorization Code Flow and PKCE for secure
+        delegated access to user data.
+
+    - term: PKCE
+      abbreviation: Proof Key for Code Exchange
+      definition: >
+        An OAuth 2.0 extension that provides additional security for the
+        Authorization Code Flow by using a dynamically generated code verifier
+        and code challenge to prevent authorization code interception attacks.
+
+    - term: Authorization Code Flow
+      definition: >
+        An OAuth 2.0 grant type where the client exchanges a short-lived
+        authorization code (received via redirect) for access and refresh tokens.
+        Recommended for all new Chime Partner API integrations.
+
+    - term: access_token
+      definition: >
+        A short-lived JWT credential used to authenticate API requests on behalf
+        of a user. Passed as a Bearer token in the Authorization HTTP header.
+
+    - term: refresh_token
+      definition: >
+        A long-lived credential used to obtain new access tokens without requiring
+        the user to re-authenticate. Should be stored securely.
+
+    - term: Checking Account
+      definition: >
+        A Chime demand deposit account (type: checking) used for everyday spending
+        and direct deposit. Linked to the user's Chime Visa Debit Card.
+
+    - term: Savings Account
+      definition: >
+        A Chime high-yield savings account (type: savings) for storing funds with
+        automatic savings features such as round-ups and automatic savings transfers.
+
+    - term: Secured Credit Account
+      definition: >
+        A Chime secured credit builder account (type: secured_credit) that
+        allows users to build credit with no interest or fees by using a
+        security deposit as the credit limit.
+
+    - term: Early Direct Deposit
+      definition: >
+        A Chime feature (SpotMe) that makes payroll direct deposits available
+        up to two days early, reflected as pending credits in transaction history.
+
+    - term: balance
+      definition: >
+        The available funds in a Chime account at a given moment. This figure
+        excludes pending holds but reflects posted transactions and early
+        direct deposit credits.
+
+    - term: routing_number
+      definition: >
+        The ABA routing transit number associated with a Chime account,
+        identifying The Bancorp Bank or Stride Bank as the underlying
+        banking institution.
+
+    - term: Legacy Partner Auth
+      definition: >
+        A deprecated authentication mechanism using client_id, secret, and
+        auth_token query parameters. Not recommended for new integrations;
+        OAuth 2.0 should be used instead.
+
+    - term: auth_token
+      definition: >
+        A credential issued by the legacy /users/auth_token endpoint. Used
+        as a query parameter instead of a Bearer token. Deprecated in favor
+        of OAuth 2.0 Bearer tokens.
+
+    - term: Sandbox
+      definition: >
+        A testing environment provided by Chime for partner developers to
+        simulate API interactions without affecting real user accounts or
+        triggering real financial transactions.
+
+    - term: Neobank
+      definition: >
+        A digital-first bank that operates entirely online without physical
+        branch locations. Chime is a neobank that partners with FDIC-insured
+        banks (Bancorp Bank and Stride Bank) to provide banking services.
+
+    - term: SpotMe
+      definition: >
+        Chime's fee-free overdraft protection feature that allows eligible
+        members to overdraft their checking account by up to a set limit
+        without incurring fees.
+
+    - term: statement
+      definition: >
+        A periodic summary of account activity (typically monthly) showing
+        opening balance, closing balance, and all posted transactions
+        during the period. Available as JSON or PDF download via the API.

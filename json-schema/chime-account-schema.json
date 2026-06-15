@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/chime/main/json-schema/chime-account-schema.json",
+  "title": "ChimeAccount",
+  "description": "Schema for a Chime bank account including checking, savings, and secured credit account types.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the bank account"
+    },
+    "type": {
+      "type": "string",
+      "description": "Type of Chime bank account",
+      "enum": ["checking", "savings", "secured_credit"]
+    },
+    "name": {
+      "type": "string",
+      "description": "Display name of the account"
+    },
+    "balance": {
+      "type": "number",
+      "description": "Available balance in USD (excludes holds)",
+      "minimum": 0
+    },
+    "routing_number": {
+      "type": "string",
+      "description": "ABA routing number (9 digits)",
+      "pattern": "^\\d{9}$"
+    },
+    "account_number": {
+      "type": "string",
+      "description": "Bank account number"
+    },
+    "status": {
+      "type": "string",
+      "description": "Current operational status of the account",
+      "enum": ["active", "inactive", "pending"]
+    }
+  },
+  "required": ["id", "type", "balance", "status"],
+  "additionalProperties": false
+}

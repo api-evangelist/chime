@@ -1,0 +1,71 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "schema": "https://schema.org/",
+    "fibo": "https://spec.edmcouncil.org/fibo/ontology/",
+    "chime": "https://developer.chime.com/vocab#",
+
+    "User": "schema:Person",
+    "Account": "schema:BankAccount",
+    "Transaction": "schema:MoneyTransfer",
+    "Statement": "schema:FinancialStatement",
+
+    "id": "@id",
+    "email": "schema:email",
+    "accounts": {
+      "@id": "schema:owns",
+      "@type": "@id"
+    },
+
+    "type": {
+      "@id": "chime:accountType",
+      "@type": "@vocab"
+    },
+    "name": "schema:name",
+    "balance": {
+      "@id": "schema:amount",
+      "@type": "schema:Number"
+    },
+    "routing_number": "chime:routingNumber",
+    "account_number": "chime:accountNumber",
+    "status": {
+      "@id": "chime:accountStatus",
+      "@type": "@vocab"
+    },
+
+    "amount": {
+      "@id": "schema:amount",
+      "@type": "schema:Number"
+    },
+    "description": "schema:description",
+    "date": {
+      "@id": "schema:datePosted",
+      "@type": "schema:Date"
+    },
+    "merchant_name": {
+      "@id": "schema:name",
+      "@context": {
+        "@base": "schema:Organization/"
+      }
+    },
+    "category": "schema:category",
+
+    "access_token": "chime:accessToken",
+    "refresh_token": "chime:refreshToken",
+    "expires_in": "chime:expiresIn",
+    "token_type": "chime:tokenType",
+    "scope": "chime:oauthScope",
+
+    "checking": "chime:CheckingAccount",
+    "savings": "chime:SavingsAccount",
+    "secured_credit": "chime:SecuredCreditAccount",
+
+    "active": "chime:ActiveAccount",
+    "inactive": "chime:InactiveAccount",
+    "pending": "chime:PendingAccount",
+
+    "debit": "chime:DebitTransaction",
+    "credit": "chime:CreditTransaction",
+    "transfer": "chime:TransferTransaction"
+  }
+}

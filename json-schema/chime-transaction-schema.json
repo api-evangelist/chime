@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/chime/main/json-schema/chime-transaction-schema.json",
+  "title": "ChimeTransaction",
+  "description": "Schema for a Chime bank account transaction record.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the transaction"
+    },
+    "account_id": {
+      "type": "string",
+      "description": "ID of the account the transaction belongs to"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Transaction amount in USD. Negative for debits/withdrawals, positive for credits/deposits."
+    },
+    "description": {
+      "type": "string",
+      "description": "Merchant or transaction description"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the transaction posted (ISO 8601 format: YYYY-MM-DD)"
+    },
+    "type": {
+      "type": "string",
+      "description": "Type of transaction",
+      "enum": ["debit", "credit", "transfer"]
+    },
+    "status": {
+      "type": "string",
+      "description": "Settlement status of the transaction",
+      "enum": ["pending", "posted"]
+    },
+    "merchant_name": {
+      "type": "string",
+      "description": "Name of the merchant where the transaction occurred"
+    },
+    "category": {
+      "type": "string",
+      "description": "Spending category for the transaction"
+    }
+  },
+  "required": ["id", "account_id", "amount", "date", "type", "status"],
+  "additionalProperties": false
+}

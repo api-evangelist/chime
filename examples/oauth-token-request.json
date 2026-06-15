@@ -1,0 +1,8 @@
+{
+  "grant_type": "authorization_code",
+  "code": "auth_code_xyz789",
+  "redirect_uri": "https://yourapp.example.com/oauth/callback",
+  "client_id": "your_client_id",
+  "client_secret": "your_client_secret",
+  "code_verifier": "dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk"
+}

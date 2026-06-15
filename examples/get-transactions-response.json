@@ -1,0 +1,51 @@
+{
+  "data": [
+    {
+      "id": "txn_001",
+      "account_id": "acc_checking001",
+      "amount": -45.99,
+      "description": "AMAZON.COM PURCHASE",
+      "date": "2026-06-12",
+      "type": "debit",
+      "status": "posted",
+      "merchant_name": "Amazon",
+      "category": "Shopping"
+    },
+    {
+      "id": "txn_002",
+      "account_id": "acc_checking001",
+      "amount": 2000.00,
+      "description": "DIRECT DEPOSIT PAYROLL",
+      "date": "2026-06-10",
+      "type": "credit",
+      "status": "posted",
+      "merchant_name": null,
+      "category": "Income"
+    },
+    {
+      "id": "txn_003",
+      "account_id": "acc_checking001",
+      "amount": -12.50,
+      "description": "STARBUCKS #12345",
+      "date": "2026-06-09",
+      "type": "debit",
+      "status": "posted",
+      "merchant_name": "Starbucks",
+      "category": "Food and Drink"
+    },
+    {
+      "id": "txn_004",
+      "account_id": "acc_checking001",
+      "amount": -75.00,
+      "description": "TRANSFER TO SAVINGS",
+      "date": "2026-06-08",
+      "type": "transfer",
+      "status": "posted",
+      "merchant_name": null,
+      "category": "Transfer"
+    }
+  ],
+  "page": 1,
+  "per_page": 25,
+  "total": 4
+}

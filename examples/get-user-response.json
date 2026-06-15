@@ -1,0 +1,24 @@
+{
+  "id": "usr_abc123def456",
+  "email": "user@example.com",
+  "accounts": [
+    {
+      "id": "acc_checking001",
+      "type": "checking",
+      "name": "Chime Checking Account",
+      "balance": 1234.56,
+      "routing_number": "101019766",
+      "account_number": "1234567890",
+      "status": "active"
+    },
+    {
+      "id": "acc_savings001",
+      "type": "savings",
+      "name": "Chime Savings Account",
+      "balance": 5678.90,
+      "routing_number": "101019766",
+      "account_number": "0987654321",
+      "status": "active"
+    }
+  ]
+}
