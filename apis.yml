@@ -5,7 +5,7 @@ description: Chime is a neobank and fintech platform offering fee-free checking 
   features for consumer banking. The Chime Partner API enables developers to access
   user account information, transaction details, account balances, statements, and
   payment initiation through OAuth 2.0 authentication.
-image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 url: https://raw.githubusercontent.com/api-evangelist/chime/refs/heads/main/apis.yml
 created: '2026-06-13'
 modified: '2026-06-13'
@@ -27,7 +27,7 @@ apis:
     information, transactions, account balances, statements, and payment initiation.
     Authentication is handled via OAuth 2.0 with support for Authorization Code Flow
     and PKCE.
-  image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
   humanURL: https://developer.chime.com/
   baseURL: https://api.chimebank.com/chime/v1
   tags:
