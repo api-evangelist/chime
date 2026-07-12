@@ -45,6 +45,12 @@ apis:
   - url: graphql/chime-graphql.md
     type: GraphQL
 common:
+- type: VulnerabilityDisclosure
+  url: security/chime-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/chime-domain-security.yml
+- type: Authentication
+  url: authentication/chime-authentication.yml
 - type: Website
   url: https://www.chime.com/
 - type: Documentation
