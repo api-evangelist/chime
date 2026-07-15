@@ -45,6 +45,8 @@ apis:
   - url: graphql/chime-graphql.md
     type: GraphQL
 common:
+- type: AgenticAccess
+  url: agentic-access/chime-agentic-access.yml
 - type: VulnerabilityDisclosure
   url: security/chime-vulnerability-disclosure.yml
 - type: DomainSecurity
