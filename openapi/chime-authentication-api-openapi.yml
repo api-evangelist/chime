@@ -1,0 +1,136 @@
+openapi: 3.0.3
+info:
+  title: Chime Partner Authentication API
+  description: 'The Chime Partner API provides programmatic access to Chime user account information, transactions, account balances, statements, and payment initiation. Authentication is handled via OAuth 2.0 with support for Authorization Code Flow and PKCE (Proof Key for Code Exchange).
+
+    '
+  version: 1.0.0
+  contact:
+    url: https://developer.chime.com/
+  x-api-status: production
+servers:
+- url: https://api.chimebank.com/chime/v1
+  description: Chime Partner API Production Server
+security:
+- BearerAuth: []
+tags:
+- name: Authentication
+  description: Legacy partner authentication
+paths:
+  /users/auth_token:
+    post:
+      operationId: signIn
+      summary: Sign in and obtain auth token (Legacy)
+      description: 'Legacy authentication endpoint. Returns an auth_token for use with legacy API calls. Not recommended for new integrations; use OAuth 2.0 instead.
+
+        '
+      tags:
+      - Authentication
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LegacySignInRequest'
+      responses:
+        '200':
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LegacyAuthResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      operationId: signOut
+      summary: Invalidate auth token (Legacy)
+      description: 'Legacy endpoint to invalidate an existing auth_token (logout). Not recommended for new integrations; use OAuth 2.0 instead.
+
+        '
+      tags:
+      - Authentication
+      parameters:
+      - name: client_id
+        in: query
+        required: true
+        description: Your application's client identifier
+        schema:
+          type: string
+      - name: secret
+        in: query
+        required: true
+        description: Your application's client secret
+        schema:
+          type: string
+      - name: auth_token
+        in: query
+        required: true
+        description: The auth token to invalidate
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Token invalidated successfully
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    LegacyAuthResponse:
+      type: object
+      description: Legacy authentication response
+      properties:
+        auth_token:
+          type: string
+          description: Authentication token for legacy API calls
+        user_id:
+          type: string
+          description: Authenticated user's ID
+    Error:
+      type: object
+      description: Standard API error response
+      properties:
+        error:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        status:
+          type: integer
+          description: HTTP status code
+    LegacySignInRequest:
+      type: object
+      required:
+      - client_id
+      - secret
+      - username
+      - password
+      properties:
+        client_id:
+          type: string
+          description: Your application's client identifier
+        secret:
+          type: string
+          description: Your application's client secret
+        username:
+          type: string
+          description: User's email or username
+        password:
+          type: string
+          format: password
+          description: User's password
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: OAuth 2.0 Bearer token

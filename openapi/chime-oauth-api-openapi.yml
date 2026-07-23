@@ -1,0 +1,228 @@
+openapi: 3.0.3
+info:
+  title: Chime Partner Authentication OAuth API
+  description: 'The Chime Partner API provides programmatic access to Chime user account information, transactions, account balances, statements, and payment initiation. Authentication is handled via OAuth 2.0 with support for Authorization Code Flow and PKCE (Proof Key for Code Exchange).
+
+    '
+  version: 1.0.0
+  contact:
+    url: https://developer.chime.com/
+  x-api-status: production
+servers:
+- url: https://api.chimebank.com/chime/v1
+  description: Chime Partner API Production Server
+security:
+- BearerAuth: []
+tags:
+- name: OAuth
+  description: OAuth 2.0 authorization and token management
+paths:
+  /oauth/authorize:
+    get:
+      operationId: oauthAuthorize
+      summary: Initiate OAuth 2.0 Authorization
+      description: 'Initiates the OAuth 2.0 Authorization Code Flow with optional PKCE support. Redirects the user to the Chime authorization page.
+
+        '
+      tags:
+      - OAuth
+      security: []
+      parameters:
+      - name: response_type
+        in: query
+        required: true
+        description: Must be "code" for Authorization Code Flow
+        schema:
+          type: string
+          enum:
+          - code
+      - name: client_id
+        in: query
+        required: true
+        description: Your application's client identifier
+        schema:
+          type: string
+      - name: redirect_uri
+        in: query
+        required: true
+        description: URI to redirect to after authorization
+        schema:
+          type: string
+          format: uri
+      - name: scope
+        in: query
+        required: false
+        description: Space-separated list of requested scopes
+        schema:
+          type: string
+      - name: state
+        in: query
+        required: false
+        description: Opaque value to maintain state between request and callback
+        schema:
+          type: string
+      - name: code_challenge
+        in: query
+        required: false
+        description: PKCE code challenge (Base64-URL-encoded SHA-256 hash of the code verifier)
+        schema:
+          type: string
+      - name: code_challenge_method
+        in: query
+        required: false
+        description: Method used to generate the code challenge
+        schema:
+          type: string
+          enum:
+          - S256
+      responses:
+        '302':
+          description: Redirect to Chime authorization page
+        '400':
+          description: Bad request - invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /oauth/tokens:
+    post:
+      operationId: oauthToken
+      summary: Exchange authorization code for tokens
+      description: 'Exchange an authorization code for an access token and refresh token, or refresh an existing access token using a refresh token.
+
+        '
+      tags:
+      - OAuth
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              oneOf:
+              - $ref: '#/components/schemas/AuthorizationCodeRequest'
+              - $ref: '#/components/schemas/RefreshTokenRequest'
+      responses:
+        '200':
+          description: Token exchange successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '400':
+          description: Bad request - invalid grant or parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuthError'
+        '401':
+          description: Unauthorized - invalid client credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuthError'
+components:
+  schemas:
+    TokenResponse:
+      type: object
+      description: OAuth 2.0 token response
+      properties:
+        access_token:
+          type: string
+          description: Access token for making API requests
+        token_type:
+          type: string
+          description: Token type (always "Bearer")
+          enum:
+          - Bearer
+        expires_in:
+          type: integer
+          description: Number of seconds until the access token expires
+        refresh_token:
+          type: string
+          description: Refresh token for obtaining new access tokens
+        scope:
+          type: string
+          description: Space-separated list of granted scopes
+    OAuthError:
+      type: object
+      description: OAuth 2.0 error response
+      properties:
+        error:
+          type: string
+          description: OAuth error code
+          enum:
+          - invalid_grant
+          - invalid_client
+          - invalid_request
+          - unauthorized_client
+        error_description:
+          type: string
+          description: Human-readable error description
+    Error:
+      type: object
+      description: Standard API error response
+      properties:
+        error:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        status:
+          type: integer
+          description: HTTP status code
+    RefreshTokenRequest:
+      type: object
+      required:
+      - grant_type
+      - refresh_token
+      - client_id
+      properties:
+        grant_type:
+          type: string
+          enum:
+          - refresh_token
+        refresh_token:
+          type: string
+          description: Refresh token from a previous token exchange
+        client_id:
+          type: string
+          description: Your application's client identifier
+        client_secret:
+          type: string
+          description: Your application's client secret
+    AuthorizationCodeRequest:
+      type: object
+      required:
+      - grant_type
+      - code
+      - redirect_uri
+      - client_id
+      properties:
+        grant_type:
+          type: string
+          enum:
+          - authorization_code
+        code:
+          type: string
+          description: Authorization code received from the authorization endpoint
+        redirect_uri:
+          type: string
+          format: uri
+          description: Must match the redirect_uri used in the authorization request
+        client_id:
+          type: string
+          description: Your application's client identifier
+        client_secret:
+          type: string
+          description: Your application's client secret
+        code_verifier:
+          type: string
+          description: PKCE code verifier (if code_challenge was used)
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: OAuth 2.0 Bearer token

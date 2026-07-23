@@ -1,0 +1,176 @@
+openapi: 3.0.3
+info:
+  title: Chime Partner Authentication Statements API
+  description: 'The Chime Partner API provides programmatic access to Chime user account information, transactions, account balances, statements, and payment initiation. Authentication is handled via OAuth 2.0 with support for Authorization Code Flow and PKCE (Proof Key for Code Exchange).
+
+    '
+  version: 1.0.0
+  contact:
+    url: https://developer.chime.com/
+  x-api-status: production
+servers:
+- url: https://api.chimebank.com/chime/v1
+  description: Chime Partner API Production Server
+security:
+- BearerAuth: []
+tags:
+- name: Statements
+  description: Access account statements
+paths:
+  /users/{id}/accounts/{account_id}/statement:
+    get:
+      operationId: getAccountStatement
+      summary: Get account statement
+      description: Resource for accessing periodic statements for the given bank account.
+      tags:
+      - Statements
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Unique identifier for the Chime user
+        schema:
+          type: string
+      - name: account_id
+        in: path
+        required: true
+        description: Unique identifier for the bank account
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        required: true
+        description: Bearer access token obtained via OAuth 2.0
+        schema:
+          type: string
+          example: Bearer eyJhbGciOiJSUzI1NiJ9...
+      - name: year
+        in: query
+        required: false
+        description: Statement year (YYYY)
+        schema:
+          type: integer
+      - name: month
+        in: query
+        required: false
+        description: Statement month (1-12)
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 12
+      responses:
+        '200':
+          description: Account statement retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Statement'
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: Unauthorized - invalid or expired access token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Statement not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Transaction:
+      type: object
+      description: A single transaction record
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the transaction
+        account_id:
+          type: string
+          description: ID of the account the transaction belongs to
+        amount:
+          type: number
+          format: double
+          description: Transaction amount (negative for debits, positive for credits)
+        description:
+          type: string
+          description: Merchant or transaction description
+        date:
+          type: string
+          format: date
+          description: Date the transaction posted (ISO 8601)
+        type:
+          type: string
+          description: Type of transaction
+          enum:
+          - debit
+          - credit
+          - transfer
+        status:
+          type: string
+          description: Settlement status
+          enum:
+          - pending
+          - posted
+        merchant_name:
+          type: string
+          description: Name of the merchant
+        category:
+          type: string
+          description: Transaction category
+    Error:
+      type: object
+      description: Standard API error response
+      properties:
+        error:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        status:
+          type: integer
+          description: HTTP status code
+    Statement:
+      type: object
+      description: Account statement summary
+      properties:
+        account_id:
+          type: string
+          description: ID of the account the statement belongs to
+        period_start:
+          type: string
+          format: date
+          description: Start date of the statement period
+        period_end:
+          type: string
+          format: date
+          description: End date of the statement period
+        opening_balance:
+          type: number
+          format: double
+          description: Balance at start of period
+        closing_balance:
+          type: number
+          format: double
+          description: Balance at end of period
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+          description: Transactions included in this statement
+        download_url:
+          type: string
+          format: uri
+          description: URL to download statement as PDF
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: OAuth 2.0 Bearer token

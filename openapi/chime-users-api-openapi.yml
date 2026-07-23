@@ -1,0 +1,137 @@
+openapi: 3.0.3
+info:
+  title: Chime Partner Authentication Users API
+  description: 'The Chime Partner API provides programmatic access to Chime user account information, transactions, account balances, statements, and payment initiation. Authentication is handled via OAuth 2.0 with support for Authorization Code Flow and PKCE (Proof Key for Code Exchange).
+
+    '
+  version: 1.0.0
+  contact:
+    url: https://developer.chime.com/
+  x-api-status: production
+servers:
+- url: https://api.chimebank.com/chime/v1
+  description: Chime Partner API Production Server
+security:
+- BearerAuth: []
+tags:
+- name: Users
+  description: Access user account information
+paths:
+  /users/{id}:
+    get:
+      operationId: getUser
+      summary: Get user account information
+      description: Resource for accessing the user's account information including linked bank accounts.
+      tags:
+      - Users
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Unique identifier for the Chime user
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        required: true
+        description: Bearer access token obtained via OAuth 2.0
+        schema:
+          type: string
+          example: Bearer eyJhbGciOiJSUzI1NiJ9...
+      responses:
+        '200':
+          description: User account information retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized - invalid or expired access token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden - insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Account:
+      type: object
+      description: Chime bank account details
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the account
+        type:
+          type: string
+          description: Type of bank account
+          enum:
+          - checking
+          - savings
+          - secured_credit
+        name:
+          type: string
+          description: Display name of the account
+        balance:
+          type: number
+          format: double
+          description: Available balance (excludes holds)
+        routing_number:
+          type: string
+          description: ABA routing number
+          pattern: ^\d{9}$
+        account_number:
+          type: string
+          description: Bank account number
+        status:
+          type: string
+          description: Current status of the account
+          enum:
+          - active
+          - inactive
+          - pending
+    User:
+      type: object
+      description: Chime user with linked bank accounts
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the user
+        email:
+          type: string
+          format: email
+          description: User's email address
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Account'
+          description: List of linked bank accounts
+    Error:
+      type: object
+      description: Standard API error response
+      properties:
+        error:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        status:
+          type: integer
+          description: HTTP status code
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: OAuth 2.0 Bearer token
