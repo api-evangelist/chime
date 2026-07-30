@@ -5,7 +5,20 @@ description: Chime is a neobank and fintech platform offering fee-free checking 
   features for consumer banking. The Chime Partner API enables developers to access
   user account information, transaction details, account balances, statements, and
   payment initiation through OAuth 2.0 authentication.
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/chime.png
 url: https://raw.githubusercontent.com/api-evangelist/chime/refs/heads/main/apis.yml
 created: '2026-06-13'
 modified: '2026-06-13'
@@ -21,29 +34,86 @@ tags:
 - Peer-to-Peer Payments
 - Consumer Banking
 apis:
-- aid: chime:chime-partner-api
-  name: Chime Partner API
-  description: The Chime Partner API provides programmatic access to Chime user account
-    information, transactions, account balances, statements, and payment initiation.
-    Authentication is handled via OAuth 2.0 with support for Authorization Code Flow
-    and PKCE.
-  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+- aid: chime:chime-authentication-api
+  name: Chime Authentication API
+  description: Legacy partner authentication
   humanURL: https://developer.chime.com/
   baseURL: https://api.chimebank.com/chime/v1
   tags:
-  - Banking
-  - Accounts
-  - Transactions
-  - Payments
+  - Authentication
   properties:
+  - type: OpenAPI
+    url: openapi/chime-authentication-api-openapi.yml
   - type: Documentation
     url: https://developer.chime.com/docs/chime-apis
-  - type: OpenAPI
-    url: https://raw.githubusercontent.com/api-evangelist/chime/refs/heads/main/openapi/chime-partner-api-openapi.yml
   - type: Sandbox
     url: https://developer.chime.com/
-  - url: graphql/chime-graphql.md
-    type: GraphQL
+  - type: GraphQL
+    url: graphql/chime-graphql.md
+- aid: chime:chime-oauth-api
+  name: Chime OAuth API
+  description: OAuth 2.0 authorization and token management
+  humanURL: https://developer.chime.com/
+  baseURL: https://api.chimebank.com/chime/v1
+  tags:
+  - OAuth
+  properties:
+  - type: OpenAPI
+    url: openapi/chime-oauth-api-openapi.yml
+  - type: Documentation
+    url: https://developer.chime.com/docs/chime-apis
+  - type: Sandbox
+    url: https://developer.chime.com/
+  - type: GraphQL
+    url: graphql/chime-graphql.md
+- aid: chime:chime-statements-api
+  name: Chime Statements API
+  description: Access account statements
+  humanURL: https://developer.chime.com/
+  baseURL: https://api.chimebank.com/chime/v1
+  tags:
+  - Statements
+  properties:
+  - type: OpenAPI
+    url: openapi/chime-statements-api-openapi.yml
+  - type: Documentation
+    url: https://developer.chime.com/docs/chime-apis
+  - type: Sandbox
+    url: https://developer.chime.com/
+  - type: GraphQL
+    url: graphql/chime-graphql.md
+- aid: chime:chime-transactions-api
+  name: Chime Transactions API
+  description: Access transaction history
+  humanURL: https://developer.chime.com/
+  baseURL: https://api.chimebank.com/chime/v1
+  tags:
+  - Transactions
+  properties:
+  - type: OpenAPI
+    url: openapi/chime-transactions-api-openapi.yml
+  - type: Documentation
+    url: https://developer.chime.com/docs/chime-apis
+  - type: Sandbox
+    url: https://developer.chime.com/
+  - type: GraphQL
+    url: graphql/chime-graphql.md
+- aid: chime:chime-users-api
+  name: Chime Users API
+  description: Access user account information
+  humanURL: https://developer.chime.com/
+  baseURL: https://api.chimebank.com/chime/v1
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/chime-users-api-openapi.yml
+  - type: Documentation
+    url: https://developer.chime.com/docs/chime-apis
+  - type: Sandbox
+    url: https://developer.chime.com/
+  - type: GraphQL
+    url: graphql/chime-graphql.md
 common:
 - type: AgenticAccess
   url: agentic-access/chime-agentic-access.yml
