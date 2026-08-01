@@ -1,0 +1,22 @@
+{
+  "provider": "chime",
+  "sources": [
+    "chime-authentication-api-openapi.yml",
+    "chime-oauth-api-openapi.yml",
+    "chime-statements-api-openapi.yml",
+    "chime-transactions-api-openapi.yml",
+    "chime-users-api-openapi.yml"
+  ],
+  "outputs": [
+    "chime-authentication-api-openapi.yml",
+    "chime-oauth-api-openapi.yml",
+    "chime-statements-api-openapi.yml",
+    "chime-transactions-api-openapi.yml",
+    "chime-users-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
