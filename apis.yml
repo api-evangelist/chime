@@ -115,6 +115,8 @@ apis:
   - type: GraphQL
     url: graphql/chime-graphql.md
 common:
+- type: ChangeLog
+  url: https://developer.chime.com/changelog
 - type: AgenticAccess
   url: agentic-access/chime-agentic-access.yml
 - type: VulnerabilityDisclosure
