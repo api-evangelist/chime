@@ -5,6 +5,18 @@ description: Chime is a neobank and fintech platform offering fee-free checking 
   features for consumer banking. The Chime Partner API enables developers to access
   user account information, transaction details, account balances, statements, and
   payment initiation through OAuth 2.0 authentication.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-11'
+  method: derived
 accessModel:
   pricing: freemium
   onboarding: self-serve
