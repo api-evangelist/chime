@@ -1,0 +1,67 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Chime Partner Authentication Statements API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Statements",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get account statement",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.chimebank.com/chime/v1/users/:id/accounts/:account_id/statement",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for the Chime user"
+              },
+              {
+                "name": "account_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for the bank account"
+              },
+              {
+                "name": "year",
+                "value": "",
+                "type": "query",
+                "description": "Statement year (YYYY)"
+              },
+              {
+                "name": "month",
+                "value": "",
+                "type": "query",
+                "description": "Statement month (1-12)"
+              }
+            ]
+          },
+          "docs": "Resource for accessing periodic statements for the given bank account."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

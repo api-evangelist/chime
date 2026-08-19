@@ -1,0 +1,70 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Chime Partner Authentication API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Authentication",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Sign in and obtain auth token (Legacy)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.chimebank.com/chime/v1/users/auth_token",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Legacy authentication endpoint. Returns an auth_token for use with legacy API calls. Not recommended for new integrations; use OAuth 2.0 instead.\n"
+        },
+        {
+          "info": {
+            "name": "Invalidate auth token (Legacy)",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.chimebank.com/chime/v1/users/auth_token",
+            "params": [
+              {
+                "name": "client_id",
+                "value": "",
+                "type": "query",
+                "description": "Your application's client identifier"
+              },
+              {
+                "name": "secret",
+                "value": "",
+                "type": "query",
+                "description": "Your application's client secret"
+              },
+              {
+                "name": "auth_token",
+                "value": "",
+                "type": "query",
+                "description": "The auth token to invalidate"
+              }
+            ]
+          },
+          "docs": "Legacy endpoint to invalidate an existing auth_token (logout). Not recommended for new integrations; use OAuth 2.0 instead.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,49 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Chime Partner Authentication Users API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Users",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get user account information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.chimebank.com/chime/v1/users/:id",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for the Chime user"
+              }
+            ]
+          },
+          "docs": "Resource for accessing the user's account information including linked bank accounts."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
