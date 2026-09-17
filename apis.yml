@@ -63,24 +63,6 @@ apis:
     url: https://developer.chime.com/
   - type: GraphQL
     url: graphql/chime-graphql.md
-- aid: chime:chime-oauth-api
-  name: Chime OAuth API
-  description: OAuth 2.0 authorization and token management
-  humanURL: https://developer.chime.com/
-  baseURL: https://api.chimebank.com/chime/v1
-  tags:
-  - Authentication
-  tags_raw:
-  - OAuth
-  properties:
-  - type: OpenAPI
-    url: openapi/chime-oauth-api-openapi.yml
-  - type: Documentation
-    url: https://developer.chime.com/docs/chime-apis
-  - type: Sandbox
-    url: https://developer.chime.com/
-  - type: GraphQL
-    url: graphql/chime-graphql.md
 - aid: chime:chime-statements-api
   name: Chime Statements API
   description: Access account statements
@@ -127,6 +109,22 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/chime-users-api-openapi.yml
+  - type: Documentation
+    url: https://developer.chime.com/docs/chime-apis
+  - type: Sandbox
+    url: https://developer.chime.com/
+  - type: GraphQL
+    url: graphql/chime-graphql.md
+- aid: chime:chime-oauth-api
+  name: Chime O Auth API
+  description: OAuth 2.0 authorization and token management
+  humanURL: https://developer.chime.com/
+  baseURL: https://api.chimebank.com/chime/v1
+  tags:
+  - OAuth
+  properties:
+  - type: OpenAPI
+    url: openapi/chime-oauth-api-openapi.yml
   - type: Documentation
     url: https://developer.chime.com/docs/chime-apis
   - type: Sandbox
