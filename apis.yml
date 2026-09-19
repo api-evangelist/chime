@@ -121,6 +121,8 @@ apis:
   humanURL: https://developer.chime.com/
   baseURL: https://api.chimebank.com/chime/v1
   tags:
+  - Authentication
+  tags_raw:
   - OAuth
   properties:
   - type: OpenAPI
