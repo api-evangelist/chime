@@ -1,9 +1,7 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   title: Chime Partner Authentication API
-  description: 'The Chime Partner API provides programmatic access to Chime user account information, transactions, account balances, statements, and payment initiation. Authentication is handled via OAuth 2.0 with support for Authorization Code Flow and PKCE (Proof Key for Code Exchange).
-
-    '
+  description: The Chime Partner API provides programmatic access to Chime user account information, transactions, account balances, statements, and payment initiation. Authentication is handled via OAuth 2.0 with support for Authorization Code Flow and PKCE (Proof Key for Code Exchange).
   version: 1.0.0
   contact:
     url: https://developer.chime.com/
@@ -21,9 +19,7 @@ paths:
     post:
       operationId: signIn
       summary: Sign in and obtain auth token (Legacy)
-      description: 'Legacy authentication endpoint. Returns an auth_token for use with legacy API calls. Not recommended for new integrations; use OAuth 2.0 instead.
-
-        '
+      description: Legacy authentication endpoint. Returns an auth_token for use with legacy API calls. Not recommended for new integrations; use OAuth 2.0 instead.
       tags:
       - Authentication
       security: []
@@ -49,9 +45,7 @@ paths:
     delete:
       operationId: signOut
       summary: Invalidate auth token (Legacy)
-      description: 'Legacy endpoint to invalidate an existing auth_token (logout). Not recommended for new integrations; use OAuth 2.0 instead.
-
-        '
+      description: Legacy endpoint to invalidate an existing auth_token (logout). Not recommended for new integrations; use OAuth 2.0 instead.
       tags:
       - Authentication
       parameters:
@@ -84,16 +78,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    LegacyAuthResponse:
-      type: object
-      description: Legacy authentication response
-      properties:
-        auth_token:
-          type: string
-          description: Authentication token for legacy API calls
-        user_id:
-          type: string
-          description: Authenticated user's ID
     Error:
       type: object
       description: Standard API error response
@@ -128,6 +112,16 @@ components:
           type: string
           format: password
           description: User's password
+    LegacyAuthResponse:
+      type: object
+      description: Legacy authentication response
+      properties:
+        auth_token:
+          type: string
+          description: Authentication token for legacy API calls
+        user_id:
+          type: string
+          description: Authenticated user's ID
   securitySchemes:
     BearerAuth:
       type: http

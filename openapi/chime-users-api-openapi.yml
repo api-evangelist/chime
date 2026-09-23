@@ -1,9 +1,7 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Chime Partner Authentication Users API
-  description: 'The Chime Partner API provides programmatic access to Chime user account information, transactions, account balances, statements, and payment initiation. Authentication is handled via OAuth 2.0 with support for Authorization Code Flow and PKCE (Proof Key for Code Exchange).
-
-    '
+  title: Chime Partner Users API
+  description: The Chime Partner API provides programmatic access to Chime user account information, transactions, account balances, statements, and payment initiation. Authentication is handled via OAuth 2.0 with support for Authorization Code Flow and PKCE (Proof Key for Code Exchange).
   version: 1.0.0
   contact:
     url: https://developer.chime.com/
@@ -65,6 +63,35 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    Error:
+      type: object
+      description: Standard API error response
+      properties:
+        error:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        status:
+          type: integer
+          description: HTTP status code
+    User:
+      type: object
+      description: Chime user with linked bank accounts
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the user
+        email:
+          type: string
+          format: email
+          description: User's email address
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Account'
+          description: List of linked bank accounts
     Account:
       type: object
       description: Chime bank account details
@@ -100,35 +127,6 @@ components:
           - active
           - inactive
           - pending
-    User:
-      type: object
-      description: Chime user with linked bank accounts
-      properties:
-        id:
-          type: string
-          description: Unique identifier for the user
-        email:
-          type: string
-          format: email
-          description: User's email address
-        accounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/Account'
-          description: List of linked bank accounts
-    Error:
-      type: object
-      description: Standard API error response
-      properties:
-        error:
-          type: string
-          description: Error code
-        message:
-          type: string
-          description: Human-readable error message
-        status:
-          type: integer
-          description: HTTP status code
   securitySchemes:
     BearerAuth:
       type: http

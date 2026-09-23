@@ -1,9 +1,7 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Chime Partner Authentication OAuth API
-  description: 'The Chime Partner API provides programmatic access to Chime user account information, transactions, account balances, statements, and payment initiation. Authentication is handled via OAuth 2.0 with support for Authorization Code Flow and PKCE (Proof Key for Code Exchange).
-
-    '
+  title: Chime Partner O Auth API
+  description: The Chime Partner API provides programmatic access to Chime user account information, transactions, account balances, statements, and payment initiation. Authentication is handled via OAuth 2.0 with support for Authorization Code Flow and PKCE (Proof Key for Code Exchange).
   version: 1.0.0
   contact:
     url: https://developer.chime.com/
@@ -21,9 +19,7 @@ paths:
     get:
       operationId: oauthAuthorize
       summary: Initiate OAuth 2.0 Authorization
-      description: 'Initiates the OAuth 2.0 Authorization Code Flow with optional PKCE support. Redirects the user to the Chime authorization page.
-
-        '
+      description: Initiates the OAuth 2.0 Authorization Code Flow with optional PKCE support. Redirects the user to the Chime authorization page.
       tags:
       - OAuth
       security: []
@@ -88,9 +84,7 @@ paths:
     post:
       operationId: oauthToken
       summary: Exchange authorization code for tokens
-      description: 'Exchange an authorization code for an access token and refresh token, or refresh an existing access token using a refresh token.
-
-        '
+      description: Exchange an authorization code for an access token and refresh token, or refresh an existing access token using a refresh token.
       tags:
       - OAuth
       security: []
@@ -123,6 +117,54 @@ paths:
                 $ref: '#/components/schemas/OAuthError'
 components:
   schemas:
+    RefreshTokenRequest:
+      type: object
+      required:
+      - grant_type
+      - refresh_token
+      - client_id
+      properties:
+        grant_type:
+          type: string
+          enum:
+          - refresh_token
+        refresh_token:
+          type: string
+          description: Refresh token from a previous token exchange
+        client_id:
+          type: string
+          description: Your application's client identifier
+        client_secret:
+          type: string
+          description: Your application's client secret
+    Error:
+      type: object
+      description: Standard API error response
+      properties:
+        error:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        status:
+          type: integer
+          description: HTTP status code
+    OAuthError:
+      type: object
+      description: OAuth 2.0 error response
+      properties:
+        error:
+          type: string
+          description: OAuth error code
+          enum:
+          - invalid_grant
+          - invalid_client
+          - invalid_request
+          - unauthorized_client
+        error_description:
+          type: string
+          description: Human-readable error description
     TokenResponse:
       type: object
       description: OAuth 2.0 token response
@@ -144,54 +186,6 @@ components:
         scope:
           type: string
           description: Space-separated list of granted scopes
-    OAuthError:
-      type: object
-      description: OAuth 2.0 error response
-      properties:
-        error:
-          type: string
-          description: OAuth error code
-          enum:
-          - invalid_grant
-          - invalid_client
-          - invalid_request
-          - unauthorized_client
-        error_description:
-          type: string
-          description: Human-readable error description
-    Error:
-      type: object
-      description: Standard API error response
-      properties:
-        error:
-          type: string
-          description: Error code
-        message:
-          type: string
-          description: Human-readable error message
-        status:
-          type: integer
-          description: HTTP status code
-    RefreshTokenRequest:
-      type: object
-      required:
-      - grant_type
-      - refresh_token
-      - client_id
-      properties:
-        grant_type:
-          type: string
-          enum:
-          - refresh_token
-        refresh_token:
-          type: string
-          description: Refresh token from a previous token exchange
-        client_id:
-          type: string
-          description: Your application's client identifier
-        client_secret:
-          type: string
-          description: Your application's client secret
     AuthorizationCodeRequest:
       type: object
       required:

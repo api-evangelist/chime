@@ -1,9 +1,7 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Chime Partner Authentication Statements API
-  description: 'The Chime Partner API provides programmatic access to Chime user account information, transactions, account balances, statements, and payment initiation. Authentication is handled via OAuth 2.0 with support for Authorization Code Flow and PKCE (Proof Key for Code Exchange).
-
-    '
+  title: Chime Partner Statements API
+  description: The Chime Partner API provides programmatic access to Chime user account information, transactions, account balances, statements, and payment initiation. Authentication is handled via OAuth 2.0 with support for Authorization Code Flow and PKCE (Proof Key for Code Exchange).
   version: 1.0.0
   contact:
     url: https://developer.chime.com/
@@ -123,19 +121,6 @@ components:
         category:
           type: string
           description: Transaction category
-    Error:
-      type: object
-      description: Standard API error response
-      properties:
-        error:
-          type: string
-          description: Error code
-        message:
-          type: string
-          description: Human-readable error message
-        status:
-          type: integer
-          description: HTTP status code
     Statement:
       type: object
       description: Account statement summary
@@ -168,6 +153,19 @@ components:
           type: string
           format: uri
           description: URL to download statement as PDF
+    Error:
+      type: object
+      description: Standard API error response
+      properties:
+        error:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        status:
+          type: integer
+          description: HTTP status code
   securitySchemes:
     BearerAuth:
       type: http

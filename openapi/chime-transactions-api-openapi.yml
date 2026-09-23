@@ -1,9 +1,7 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Chime Partner Authentication Transactions API
-  description: 'The Chime Partner API provides programmatic access to Chime user account information, transactions, account balances, statements, and payment initiation. Authentication is handled via OAuth 2.0 with support for Authorization Code Flow and PKCE (Proof Key for Code Exchange).
-
-    '
+  title: Chime Partner Transactions API
+  description: The Chime Partner API provides programmatic access to Chime user account information, transactions, account balances, statements, and payment initiation. Authentication is handled via OAuth 2.0 with support for Authorization Code Flow and PKCE (Proof Key for Code Exchange).
   version: 1.0.0
   contact:
     url: https://developer.chime.com/
@@ -101,23 +99,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    TransactionList:
-      type: object
-      description: Paginated list of transactions
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Transaction'
-        page:
-          type: integer
-          description: Current page number
-        per_page:
-          type: integer
-          description: Number of results per page
-        total:
-          type: integer
-          description: Total number of transactions matching the query
     Transaction:
       type: object
       description: A single transaction record
@@ -158,6 +139,23 @@ components:
         category:
           type: string
           description: Transaction category
+    TransactionList:
+      type: object
+      description: Paginated list of transactions
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+        page:
+          type: integer
+          description: Current page number
+        per_page:
+          type: integer
+          description: Number of results per page
+        total:
+          type: integer
+          description: Total number of transactions matching the query
     Error:
       type: object
       description: Standard API error response
