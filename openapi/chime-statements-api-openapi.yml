@@ -81,6 +81,51 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    Error:
+      type: object
+      description: Standard API error response
+      properties:
+        error:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        status:
+          type: integer
+          description: HTTP status code
+    Statement:
+      type: object
+      description: Account statement summary
+      properties:
+        account_id:
+          type: string
+          description: ID of the account the statement belongs to
+        period_start:
+          type: string
+          format: date
+          description: Start date of the statement period
+        period_end:
+          type: string
+          format: date
+          description: End date of the statement period
+        opening_balance:
+          type: number
+          format: double
+          description: Balance at start of period
+        closing_balance:
+          type: number
+          format: double
+          description: Balance at end of period
+        transactions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+          description: Transactions included in this statement
+        download_url:
+          type: string
+          format: uri
+          description: URL to download statement as PDF
     Transaction:
       type: object
       description: A single transaction record
@@ -121,51 +166,6 @@ components:
         category:
           type: string
           description: Transaction category
-    Statement:
-      type: object
-      description: Account statement summary
-      properties:
-        account_id:
-          type: string
-          description: ID of the account the statement belongs to
-        period_start:
-          type: string
-          format: date
-          description: Start date of the statement period
-        period_end:
-          type: string
-          format: date
-          description: End date of the statement period
-        opening_balance:
-          type: number
-          format: double
-          description: Balance at start of period
-        closing_balance:
-          type: number
-          format: double
-          description: Balance at end of period
-        transactions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Transaction'
-          description: Transactions included in this statement
-        download_url:
-          type: string
-          format: uri
-          description: URL to download statement as PDF
-    Error:
-      type: object
-      description: Standard API error response
-      properties:
-        error:
-          type: string
-          description: Error code
-        message:
-          type: string
-          description: Human-readable error message
-        status:
-          type: integer
-          description: HTTP status code
   securitySchemes:
     BearerAuth:
       type: http

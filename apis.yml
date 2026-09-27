@@ -49,6 +49,7 @@ tags:
 - Credit Building
 - Peer-to-Peer Payments
 - Consumer Banking
+- Consumer Finance
 apis:
 - aid: chime:chime-authentication-api
   name: Chime Authentication API

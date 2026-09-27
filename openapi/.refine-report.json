@@ -10,20 +10,17 @@
     "chime-transactions-api-openapi.yml",
     "chime-users-api-openapi.yml"
   ],
-  "archived": [
-    "deleted 1 superseded output(s) from the previous generation"
-  ],
+  "archived": [],
   "errors": [],
   "warnings": [],
   "notes": [
     "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
     "chime-partner-api-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
-    "superseded outputs removed: chime-o-auth-api-openapi.yml",
-    "apis.yml register: written (+1 apis, 5 total)"
+    "apis.yml register: already-registered"
   ],
   "skipped": [
     "chime-authentication-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "chime-o-auth-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "chime-oauth-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "chime-statements-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "chime-transactions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "chime-users-api-openapi.yml: previously refined output, superseded by openapi/_original/"
