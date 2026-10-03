@@ -112,6 +112,23 @@ components:
         status:
           type: integer
           description: HTTP status code
+    TransactionList:
+      type: object
+      description: Paginated list of transactions
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+        page:
+          type: integer
+          description: Current page number
+        per_page:
+          type: integer
+          description: Number of results per page
+        total:
+          type: integer
+          description: Total number of transactions matching the query
     Transaction:
       type: object
       description: A single transaction record
@@ -152,23 +169,6 @@ components:
         category:
           type: string
           description: Transaction category
-    TransactionList:
-      type: object
-      description: Paginated list of transactions
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Transaction'
-        page:
-          type: integer
-          description: Current page number
-        per_page:
-          type: integer
-          description: Number of results per page
-        total:
-          type: integer
-          description: Total number of transactions matching the query
   securitySchemes:
     BearerAuth:
       type: http
