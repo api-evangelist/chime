@@ -63,19 +63,22 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    Error:
+    User:
       type: object
-      description: Standard API error response
+      description: Chime user with linked bank accounts
       properties:
-        error:
+        id:
           type: string
-          description: Error code
-        message:
+          description: Unique identifier for the user
+        email:
           type: string
-          description: Human-readable error message
-        status:
-          type: integer
-          description: HTTP status code
+          format: email
+          description: User's email address
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Account'
+          description: List of linked bank accounts
     Account:
       type: object
       description: Chime bank account details
@@ -111,22 +114,19 @@ components:
           - active
           - inactive
           - pending
-    User:
+    Error:
       type: object
-      description: Chime user with linked bank accounts
+      description: Standard API error response
       properties:
-        id:
+        error:
           type: string
-          description: Unique identifier for the user
-        email:
+          description: Error code
+        message:
           type: string
-          format: email
-          description: User's email address
-        accounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/Account'
-          description: List of linked bank accounts
+          description: Human-readable error message
+        status:
+          type: integer
+          description: HTTP status code
   securitySchemes:
     BearerAuth:
       type: http

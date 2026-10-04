@@ -117,21 +117,26 @@ paths:
                 $ref: '#/components/schemas/OAuthError'
 components:
   schemas:
-    OAuthError:
+    RefreshTokenRequest:
       type: object
-      description: OAuth 2.0 error response
+      required:
+      - grant_type
+      - refresh_token
+      - client_id
       properties:
-        error:
+        grant_type:
           type: string
-          description: OAuth error code
           enum:
-          - invalid_grant
-          - invalid_client
-          - invalid_request
-          - unauthorized_client
-        error_description:
+          - refresh_token
+        refresh_token:
           type: string
-          description: Human-readable error description
+          description: Refresh token from a previous token exchange
+        client_id:
+          type: string
+          description: Your application's client identifier
+        client_secret:
+          type: string
+          description: Your application's client secret
     AuthorizationCodeRequest:
       type: object
       required:
@@ -160,26 +165,34 @@ components:
         code_verifier:
           type: string
           description: PKCE code verifier (if code_challenge was used)
-    RefreshTokenRequest:
+    Error:
       type: object
-      required:
-      - grant_type
-      - refresh_token
-      - client_id
+      description: Standard API error response
       properties:
-        grant_type:
+        error:
           type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        status:
+          type: integer
+          description: HTTP status code
+    OAuthError:
+      type: object
+      description: OAuth 2.0 error response
+      properties:
+        error:
+          type: string
+          description: OAuth error code
           enum:
-          - refresh_token
-        refresh_token:
+          - invalid_grant
+          - invalid_client
+          - invalid_request
+          - unauthorized_client
+        error_description:
           type: string
-          description: Refresh token from a previous token exchange
-        client_id:
-          type: string
-          description: Your application's client identifier
-        client_secret:
-          type: string
-          description: Your application's client secret
+          description: Human-readable error description
     TokenResponse:
       type: object
       description: OAuth 2.0 token response
@@ -201,19 +214,6 @@ components:
         scope:
           type: string
           description: Space-separated list of granted scopes
-    Error:
-      type: object
-      description: Standard API error response
-      properties:
-        error:
-          type: string
-          description: Error code
-        message:
-          type: string
-          description: Human-readable error message
-        status:
-          type: integer
-          description: HTTP status code
   securitySchemes:
     BearerAuth:
       type: http
