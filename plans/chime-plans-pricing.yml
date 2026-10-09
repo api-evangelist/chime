@@ -1,3 +1,8 @@
+# Provenance stamped 2026-10-07 (roadmap#943): written by an API Evangelist sweep (dated 2026-06-13 by the file itself), not
+# harvested from the provider. `method: generated` so the economics campaign may replace it with a
+# dated, verbatim transcription; every figure below is unverified until it does.
+method: generated
+generated: '2026-06-13'
 name: Chime Plans and Pricing
 description: Chime offers consumer banking tiers with varying feature sets and API access. The platform operates on a model where banking is free for consumers; revenue is generated through interchange fees. Partner API access is available for fintech integrators and developers building on top of the Chime platform.
 url: https://chime.me/pricing/
@@ -51,3 +56,35 @@ notes:
   - Chime is not a bank; banking services are provided by The Bancorp Bank, N.A. or Stride Bank, N.A., Members FDIC.
   - Consumer account features are subject to eligibility requirements (e.g., SpotMe requires qualifying direct deposit).
   - Partner API pricing and terms are determined through direct partnership agreements with Chime.
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - free
+  - negotiated
+  units: []
+  plans:
+  - name: Chime (Free)
+    access: other
+    model: free
+    model_how: derived
+    units: []
+    periods: []
+  - name: Chime Plus
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods: []
+  - name: Chime Prime
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods: []
+  - name: Partner API Access
+    access: other
+    model: negotiated
+    model_how: derived
+    units: []
+    periods: []

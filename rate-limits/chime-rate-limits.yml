@@ -1,3 +1,8 @@
+# Provenance stamped 2026-10-07 (roadmap#943): written by an API Evangelist sweep (dated 2026-06-13 by the file itself), not
+# harvested from the provider. `method: generated` so the economics campaign may replace it with a
+# dated, verbatim transcription; every figure below is unverified until it does.
+method: generated
+generated: '2026-06-13'
 name: Chime API Rate Limits
 description: Rate limit information for the Chime Partner API. Chime does not publish specific rate limit values publicly in its developer documentation. Rate limits are enforced at the partner level and are defined in individual partnership agreements. The following reflects what is known from public documentation and general API design patterns.
 url: https://developer.chime.com/docs/chime-apis
