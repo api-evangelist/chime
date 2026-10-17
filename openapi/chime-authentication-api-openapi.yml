@@ -78,6 +78,16 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    LegacyAuthResponse:
+      type: object
+      description: Legacy authentication response
+      properties:
+        auth_token:
+          type: string
+          description: Authentication token for legacy API calls
+        user_id:
+          type: string
+          description: Authenticated user's ID
     Error:
       type: object
       description: Standard API error response
@@ -91,16 +101,6 @@ components:
         status:
           type: integer
           description: HTTP status code
-    LegacyAuthResponse:
-      type: object
-      description: Legacy authentication response
-      properties:
-        auth_token:
-          type: string
-          description: Authentication token for legacy API calls
-        user_id:
-          type: string
-          description: Authenticated user's ID
     LegacySignInRequest:
       type: object
       required:

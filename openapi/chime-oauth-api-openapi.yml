@@ -117,26 +117,42 @@ paths:
                 $ref: '#/components/schemas/OAuthError'
 components:
   schemas:
-    RefreshTokenRequest:
+    OAuthError:
       type: object
-      required:
-      - grant_type
-      - refresh_token
-      - client_id
+      description: OAuth 2.0 error response
       properties:
-        grant_type:
+        error:
           type: string
+          description: OAuth error code
           enum:
-          - refresh_token
+          - invalid_grant
+          - invalid_client
+          - invalid_request
+          - unauthorized_client
+        error_description:
+          type: string
+          description: Human-readable error description
+    TokenResponse:
+      type: object
+      description: OAuth 2.0 token response
+      properties:
+        access_token:
+          type: string
+          description: Access token for making API requests
+        token_type:
+          type: string
+          description: Token type (always "Bearer")
+          enum:
+          - Bearer
+        expires_in:
+          type: integer
+          description: Number of seconds until the access token expires
         refresh_token:
           type: string
-          description: Refresh token from a previous token exchange
-        client_id:
+          description: Refresh token for obtaining new access tokens
+        scope:
           type: string
-          description: Your application's client identifier
-        client_secret:
-          type: string
-          description: Your application's client secret
+          description: Space-separated list of granted scopes
     AuthorizationCodeRequest:
       type: object
       required:
@@ -178,42 +194,26 @@ components:
         status:
           type: integer
           description: HTTP status code
-    OAuthError:
+    RefreshTokenRequest:
       type: object
-      description: OAuth 2.0 error response
+      required:
+      - grant_type
+      - refresh_token
+      - client_id
       properties:
-        error:
+        grant_type:
           type: string
-          description: OAuth error code
           enum:
-          - invalid_grant
-          - invalid_client
-          - invalid_request
-          - unauthorized_client
-        error_description:
-          type: string
-          description: Human-readable error description
-    TokenResponse:
-      type: object
-      description: OAuth 2.0 token response
-      properties:
-        access_token:
-          type: string
-          description: Access token for making API requests
-        token_type:
-          type: string
-          description: Token type (always "Bearer")
-          enum:
-          - Bearer
-        expires_in:
-          type: integer
-          description: Number of seconds until the access token expires
+          - refresh_token
         refresh_token:
           type: string
-          description: Refresh token for obtaining new access tokens
-        scope:
+          description: Refresh token from a previous token exchange
+        client_id:
           type: string
-          description: Space-separated list of granted scopes
+          description: Your application's client identifier
+        client_secret:
+          type: string
+          description: Your application's client secret
   securitySchemes:
     BearerAuth:
       type: http

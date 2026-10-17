@@ -99,6 +99,36 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    TransactionList:
+      type: object
+      description: Paginated list of transactions
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+        page:
+          type: integer
+          description: Current page number
+        per_page:
+          type: integer
+          description: Number of results per page
+        total:
+          type: integer
+          description: Total number of transactions matching the query
+    Error:
+      type: object
+      description: Standard API error response
+      properties:
+        error:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        status:
+          type: integer
+          description: HTTP status code
     Transaction:
       type: object
       description: A single transaction record
@@ -139,36 +169,6 @@ components:
         category:
           type: string
           description: Transaction category
-    Error:
-      type: object
-      description: Standard API error response
-      properties:
-        error:
-          type: string
-          description: Error code
-        message:
-          type: string
-          description: Human-readable error message
-        status:
-          type: integer
-          description: HTTP status code
-    TransactionList:
-      type: object
-      description: Paginated list of transactions
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Transaction'
-        page:
-          type: integer
-          description: Current page number
-        per_page:
-          type: integer
-          description: Number of results per page
-        total:
-          type: integer
-          description: Total number of transactions matching the query
   securitySchemes:
     BearerAuth:
       type: http
